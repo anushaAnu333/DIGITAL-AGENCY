@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import React, { useState, useEffect, useRef } from "react";
 
 const projects = [
@@ -75,17 +76,18 @@ const Portfolio: React.FC = () => {
     new Set()
   );
   const sectionRef = useRef<HTMLDivElement>(null);
-
-  const filteredProjects = projects.filter(
-    (project) => activeCategory === "All" || project.category === activeCategory
-  );
+  const prevCategoryRef = useRef(activeCategory);
 
   // Intersection Observer for animations
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          filteredProjects.forEach((_, index) => {
+          const filtered = projects.filter(
+            (project) =>
+              activeCategory === "All" || project.category === activeCategory
+          );
+          filtered.forEach((_, index) => {
             setTimeout(() => {
               setVisibleProjects((prev) => new Set([...prev, index]));
             }, index * 200);
@@ -100,19 +102,30 @@ const Portfolio: React.FC = () => {
     }
 
     return () => observer.disconnect();
-  }, [filteredProjects]);
+  }, [activeCategory]);
 
   // Reset animations when category changes
   useEffect(() => {
-    setVisibleProjects(new Set());
-    setTimeout(() => {
-      filteredProjects.forEach((_, index) => {
-        setTimeout(() => {
-          setVisibleProjects((prev) => new Set([...prev, index]));
-        }, index * 150);
-      });
-    }, 100);
+    if (prevCategoryRef.current !== activeCategory) {
+      setVisibleProjects(new Set());
+      const filtered = projects.filter(
+        (project) =>
+          activeCategory === "All" || project.category === activeCategory
+      );
+      setTimeout(() => {
+        filtered.forEach((_, index) => {
+          setTimeout(() => {
+            setVisibleProjects((prev) => new Set([...prev, index]));
+          }, index * 150);
+        });
+      }, 100);
+      prevCategoryRef.current = activeCategory;
+    }
   }, [activeCategory]);
+
+  const filteredProjects = projects.filter(
+    (project) => activeCategory === "All" || project.category === activeCategory
+  );
 
   return (
     <section
@@ -213,10 +226,12 @@ const Portfolio: React.FC = () => {
 
                 {/* Image Container */}
                 <div className="relative overflow-hidden">
-                  <img
+                  <Image
                     src={project.image}
                     alt={project.title}
                     className="w-full h-64 object-cover transition-all duration-700 group-hover:scale-110"
+                    width={400}
+                    height={400}
                   />
 
                   {/* Gradient Overlay */}

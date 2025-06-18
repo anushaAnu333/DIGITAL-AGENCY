@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 
 const testimonials = [
   {
@@ -205,10 +206,12 @@ const Testimonials: React.FC = () => {
 
               {/* Client Info */}
               <div className="flex items-center gap-4">
-                <img
+                <Image
                   src={testimonials[activeTestimonial].avatar}
                   alt={testimonials[activeTestimonial].name}
                   className="w-16 h-16 rounded-full object-cover border-3 border-orange-500 shadow-lg"
+                  width={64}
+                  height={64}
                 />
                 <div>
                   <h4 className="text-xl font-bold text-orange-400">
@@ -262,7 +265,7 @@ const Testimonials: React.FC = () => {
                   <div className="flex items-center gap-4">
                     {/* Avatar */}
                     <div className="relative">
-                      <img
+                      <Image
                         src={testimonial.avatar}
                         alt={testimonial.name}
                         className={`w-12 h-12 rounded-full object-cover transition-all duration-300 ${
@@ -270,6 +273,8 @@ const Testimonials: React.FC = () => {
                             ? "border-2 border-orange-500"
                             : "border border-gray-600"
                         }`}
+                        width={48}  
+                        height={48}
                       />
                       {testimonial.featured && (
                         <div className="absolute -top-1 -right-1 w-4 h-4 bg-orange-500 rounded-full flex items-center justify-center">

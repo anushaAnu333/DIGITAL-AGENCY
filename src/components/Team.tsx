@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import React, { useState, useEffect, useRef } from "react";
 
 const team = [
@@ -259,10 +260,12 @@ const Team: React.FC = () => {
                   {/* Avatar section */}
                   <div className="flex items-start gap-6 mb-8">
                     <div className="relative">
-                      <img
+                      <Image
                         src={team[activeIndex].avatar}
                         alt={team[activeIndex].name}
                         className="w-24 h-24 rounded-2xl object-cover border-4 border-orange-500 shadow-xl"
+                        width={96}  
+height={96}
                       />
                       {/* Status indicator */}
                       <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 border-4 border-gray-800 rounded-full flex items-center justify-center">

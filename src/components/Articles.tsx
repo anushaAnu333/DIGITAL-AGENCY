@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 
 const articles = [
   {
@@ -106,17 +107,18 @@ const Articles: React.FC = () => {
   );
   const [selectedArticle, setSelectedArticle] = useState<number | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
-
-  const filteredArticles = articles.filter(
-    (article) => activeCategory === "All" || article.category === activeCategory
-  );
+  const prevCategoryRef = useRef(activeCategory);
 
   // Intersection Observer for animations
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          filteredArticles.forEach((_, index) => {
+          const filtered = articles.filter(
+            (article) =>
+              activeCategory === "All" || article.category === activeCategory
+          );
+          filtered.forEach((_, index) => {
             setTimeout(() => {
               setVisibleArticles((prev) => new Set([...prev, index]));
             }, index * 150);
@@ -131,19 +133,30 @@ const Articles: React.FC = () => {
     }
 
     return () => observer.disconnect();
-  }, [filteredArticles]);
+  }, [activeCategory]);
 
   // Reset animations when category changes
   useEffect(() => {
-    setVisibleArticles(new Set());
-    setTimeout(() => {
-      filteredArticles.forEach((_, index) => {
-        setTimeout(() => {
-          setVisibleArticles((prev) => new Set([...prev, index]));
-        }, index * 100);
-      });
-    }, 100);
+    if (prevCategoryRef.current !== activeCategory) {
+      setVisibleArticles(new Set());
+      const filtered = articles.filter(
+        (article) =>
+          activeCategory === "All" || article.category === activeCategory
+      );
+      setTimeout(() => {
+        filtered.forEach((_, index) => {
+          setTimeout(() => {
+            setVisibleArticles((prev) => new Set([...prev, index]));
+          }, index * 100);
+        });
+      }, 100);
+      prevCategoryRef.current = activeCategory;
+    }
   }, [activeCategory]);
+
+  const filteredArticles = articles.filter(
+    (article) => activeCategory === "All" || article.category === activeCategory
+  );
 
   return (
     <section
@@ -249,10 +262,12 @@ const Articles: React.FC = () => {
               <div className="grid md:grid-cols-2 gap-8 items-center">
                 {/* Image */}
                 <div className="relative overflow-hidden">
-                  <img
+                  <Image
                     src={filteredArticles[0].image}
                     alt={filteredArticles[0].title}
                     className="w-full h-80 md:h-96 object-cover transition-transform duration-700 group-hover:scale-110"
+                    width={900}
+                    height={600}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
@@ -363,10 +378,12 @@ const Articles: React.FC = () => {
 
                   {/* Image */}
                   <div className="relative overflow-hidden">
-                    <img
+                    <Image
                       src={article.image}
                       alt={article.title}
                       className="w-full h-48 object-cover transition-transform duration-700 group-hover:scale-110"
+                      width={900}
+                      height={400}
                     />
 
                     {/* Gradient overlay */}
@@ -486,10 +503,12 @@ const Articles: React.FC = () => {
                 </svg>
               </button>
             </div>
-            <img
+            <Image
               src={filteredArticles[selectedArticle].image}
               alt={filteredArticles[selectedArticle].title}
               className="w-full h-64 object-cover rounded-2xl mb-6"
+              width={900}
+              height={400}
             />
             <p className="text-gray-300 text-lg leading-relaxed mb-4">
               {filteredArticles[selectedArticle].excerpt}

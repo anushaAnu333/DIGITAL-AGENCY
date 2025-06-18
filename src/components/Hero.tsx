@@ -34,7 +34,7 @@ const Hero: React.FC = () => {
     }, 3000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [rotatingTexts.length]);
 
   return (
     <section
@@ -220,7 +220,7 @@ const Hero: React.FC = () => {
         </div>
 
         {/* Enhanced micro-interactions */}
-        <div
+        {/* <div
           className={`mt-12 flex justify-center space-x-6 transition-all duration-700 delay-900 ${
             isLoaded ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
           }`}>
@@ -242,11 +242,11 @@ const Hero: React.FC = () => {
             </div>
             <div className="text-gray-400 text-sm">Support</div>
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* Enhanced scroll indicator */}
-      <div
+      {/* <div
         className={`absolute bottom-8 left-1/2 -translate-x-1/2 text-gray-400 animate-bounce transition-all duration-700 delay-1000 ${
           isLoaded ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
         }`}>
@@ -266,7 +266,7 @@ const Hero: React.FC = () => {
             />
           </svg>
         </div>
-      </div>
+      </div> */}
 
       {/* Custom CSS for scan animation */}
       <style jsx>{`
